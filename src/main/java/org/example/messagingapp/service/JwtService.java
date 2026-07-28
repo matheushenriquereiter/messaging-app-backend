@@ -20,24 +20,12 @@ public class JwtService {
     @Value("${spring.secret_key}")
     private String secretKey;
 
-    public String generateAccessToken(String username) {
+    public String generateAccessToken(String userId) {
         return Jwts.builder()
-                .subject(username)
+                .subject(userId)
                 .claim("purpose", "access_token")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSignInKey())
-                .compact();
-    }
-
-    public String generateVerificationToken(String userId) {
-        Instant now = Instant.now();
-
-        return Jwts.builder()
-                .subject(userId)
-                .claim("purpose", "verification_token")
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(Duration.ofMinutes(15))))
                 .signWith(getSignInKey())
                 .compact();
     }

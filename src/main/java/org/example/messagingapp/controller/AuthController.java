@@ -2,10 +2,13 @@ package org.example.messagingapp.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.messagingapp.dto.JwtTokenDTO;
+import org.example.messagingapp.dto.TokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
+import org.example.messagingapp.dto.UserResponseDTO;
+import org.example.messagingapp.repository.UserRepository;
 import org.example.messagingapp.service.AuthService;
+import org.example.messagingapp.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,28 +16,30 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@CrossOrigin
 public class AuthController {
     private final AuthService authService;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
 
-    @PostMapping("/register")
-    public ResponseEntity<Void> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
-        authService.register(userRegisterDTO);
+    @PostMapping("/sign-up")
+    public ResponseEntity<Void> signUp(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
+        authService.signUp(userRegisterDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/validate-email")
-    public ResponseEntity<Void> validateEmail(@Valid @RequestBody JwtTokenDTO validationTokenDTO) {
-        authService.validateEmail(validationTokenDTO.jwtToken());
+    @PostMapping("/sign-in")
+    public ResponseEntity<TokenDTO> signIn(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+        TokenDTO tokenDTO = authService.signIn(userLoginDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(tokenDTO);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<JwtTokenDTO> register(@Valid @RequestBody UserLoginDTO userLoginDTO) {
-        JwtTokenDTO jwtTokenDTO = authService.login(userLoginDTO);
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> me(@RequestHeader("Authorization") String bearerToken) {
+        String token = bearerToken.replace("Bearer ", "");
+        UserResponseDTO userResponseDTO = authService.me(token);
 
-        return ResponseEntity.ok(jwtTokenDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);
     }
 }

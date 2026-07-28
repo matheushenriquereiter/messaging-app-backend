@@ -1,10 +1,10 @@
 package org.example.messagingapp.service;
 
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.example.messagingapp.dto.JwtTokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
+import org.example.messagingapp.dto.TokenDTO;
+import org.example.messagingapp.dto.UserResponseDTO;
 import org.example.messagingapp.exceptions.BusinessException;
 import org.example.messagingapp.model.User;
 import org.example.messagingapp.repository.UserRepository;
@@ -20,9 +20,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final EmailService emailService;
 
-    public void register(UserRegisterDTO userRegisterDTO) {
+    public void signUp(UserRegisterDTO userRegisterDTO) {
         Optional<User> user = userRepository.getUserByEmail(userRegisterDTO.email());
 
         if (user.isPresent()) {
@@ -33,38 +32,22 @@ public class AuthService {
         User userToRegister = new User(userRegisterDTO.username(), userRegisterDTO.email(), encodedPassword);
 
         userRepository.save(userToRegister);
-
-        emailService.sendVerificationEmail(userToRegister);
     }
 
-    public void validateEmail(String jwtToken) {
-        if (!jwtService.isTokenValid(jwtToken)) {
-            throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid or expired token");
-        }
-
-        Claims claims = jwtService.extractAllClaims(jwtToken);
-        String userId = claims.getSubject();
-        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
-
-        if (user.isVerified()) {
-            throw new BusinessException(HttpStatus.CONFLICT, "User already verified");
-        }
-
-        user.setVerified(true);
-        userRepository.save(user);
-    }
-
-    public JwtTokenDTO login(UserLoginDTO userLoginDTO) {
+    public TokenDTO signIn(UserLoginDTO userLoginDTO) {
         User user = userRepository.getUserByEmail(userLoginDTO.email()).orElseThrow(() -> new BusinessException(HttpStatus.BAD_REQUEST, "Invalid credentials"));
 
         if (!passwordEncoder.matches(userLoginDTO.password(), user.getPassword())) {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid credentials");
         }
 
-        if (!user.isVerified()) {
-            throw new BusinessException(HttpStatus.UNAUTHORIZED, "User not verified");
-        }
+        return new TokenDTO(jwtService.generateAccessToken(String.valueOf(user.getId())));
+    }
 
-        return new JwtTokenDTO(jwtService.generateAccessToken(user.getEmail()));
+    public UserResponseDTO me(String token) {
+        String userId = jwtService.extractAllClaims(token).getSubject();
+        User user = userRepository.getUserById(Long.valueOf(userId)).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
+
+        return new UserResponseDTO(user.getUsername(), user.getEmail());
     }
 }

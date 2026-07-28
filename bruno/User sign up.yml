@@ -1,15 +1,16 @@
 info:
-  name: User login
+  name: User sign up
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: POST
-  url: "{{url}}/auth/login"
+  url: "{{url}}/auth/sign-up"
   body:
     type: json
     data: |-
       {
+        "username": "Matheus",
         "email": "mathenriquereiter@gmail.com",
         "password": "matheus123"
       }
