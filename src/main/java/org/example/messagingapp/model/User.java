@@ -2,7 +2,6 @@ package org.example.messagingapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class User {
     private Long id;
 
     @NotBlank(message = "User username cannot be null or empty")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @NotBlank(message = "User email cannot be null or empty")
@@ -30,13 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private boolean isVerified;
-
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.isVerified = false;
     }
 }

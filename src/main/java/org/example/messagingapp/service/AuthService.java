@@ -1,9 +1,9 @@
 package org.example.messagingapp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.messagingapp.dto.TokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
-import org.example.messagingapp.dto.TokenDTO;
 import org.example.messagingapp.dto.UserResponseDTO;
 import org.example.messagingapp.exceptions.BusinessException;
 import org.example.messagingapp.model.User;
@@ -22,10 +22,15 @@ public class AuthService {
     private final JwtService jwtService;
 
     public void signUp(UserRegisterDTO userRegisterDTO) {
-        Optional<User> user = userRepository.getUserByEmail(userRegisterDTO.email());
+        Optional<User> userWithSameEmail = userRepository.getUserByEmail(userRegisterDTO.email());
+        Optional<User> userWithSameUsername = userRepository.getUserByUsername(userRegisterDTO.username());
 
-        if (user.isPresent()) {
+        if (userWithSameEmail.isPresent()) {
             throw new BusinessException(HttpStatus.CONFLICT, "Email already taken");
+        }
+
+        if (userWithSameUsername.isPresent()) {
+            throw new BusinessException(HttpStatus.CONFLICT, "Username already taken");
         }
 
         String encodedPassword = passwordEncoder.encode(userRegisterDTO.password());

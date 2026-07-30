@@ -6,9 +6,7 @@ import org.example.messagingapp.dto.TokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
 import org.example.messagingapp.dto.UserResponseDTO;
-import org.example.messagingapp.repository.UserRepository;
 import org.example.messagingapp.service.AuthService;
-import org.example.messagingapp.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
 
     @PostMapping("/sign-up")
     public ResponseEntity<Void> signUp(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
