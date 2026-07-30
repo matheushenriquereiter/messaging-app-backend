@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -28,6 +30,9 @@ public class User {
     @NotBlank(message = "User password cannot be null or empty")
     @Column(nullable = false)
     private String password;
+
+    @OneToMany
+    private Set<User> friends;
 
     public User(String username, String email, String password) {
         this.username = username;

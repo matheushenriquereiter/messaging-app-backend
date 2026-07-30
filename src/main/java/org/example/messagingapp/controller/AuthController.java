@@ -1,7 +1,6 @@
 package org.example.messagingapp.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.dto.TokenDTO;
 import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
@@ -13,9 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/sign-up")
     public ResponseEntity<Void> signUp(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
