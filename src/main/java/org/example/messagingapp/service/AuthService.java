@@ -46,12 +46,12 @@ public class AuthService {
             throw new BusinessException(HttpStatus.BAD_REQUEST, "Invalid credentials");
         }
 
-        return new TokenDTO(jwtService.generateAccessToken(String.valueOf(user.getId())));
+        return new TokenDTO(jwtService.generateAccessToken(user.getUsername()));
     }
 
     public UserResponseDTO me(String token) {
-        String userId = jwtService.extractAllClaims(token).getSubject();
-        User user = userRepository.getUserById(Long.valueOf(userId)).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
+        String username = jwtService.extractAllClaims(token).getSubject();
+        User user = userRepository.getUserByUsername(username).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
 
         return new UserResponseDTO(user.getUsername(), user.getEmail());
     }

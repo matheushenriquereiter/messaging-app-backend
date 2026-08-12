@@ -25,8 +25,8 @@ public class FriendsService {
         User friend = userRepository.getUserByUsername(friendUsernameDTO.username())
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Friend not found"));
 
-        String userId = jwtService.extractAllClaims(token).getSubject();
-        User user = userRepository.getUserById(Long.valueOf(userId))
+        String username = jwtService.extractAllClaims(token).getSubject();
+        User user = userRepository.getUserByUsername(username)
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Authenticated user not found"));
 
         Set<User> friends =  user.getFriends();

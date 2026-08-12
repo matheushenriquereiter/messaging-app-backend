@@ -17,7 +17,7 @@ config:
 request:
   auth:
     type: bearer
-    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwicHVycG9zZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTc4NTg4Nzk1MCwiZXhwIjoxNzg1ODkxNTUwfQ.Mm9mhvusk0Qp7-KFNmmk6a6TO5mNSsrhNyZHq3FxLH2CE8fML8mR_4nmHKcDYivCCIGf5m6J_iQMrZiNeYjI1g
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXRoZXVzIiwicHVycG9zZSI6ImFjY2Vzc190b2tlbiIsImlhdCI6MTc4NjQ5NDYyNiwiZXhwIjoxNzg2NDk4MjI2fQ.lDkphcaVV_nyQ_DQZEgsLWVVaKMwfBYielXwDl8vqR-nrcVLhWRxxXUv8ydZHxx_xHHHK1IDVT7RsOFkzok7gg
   variables:
     - name: url
       value: http://localhost:8080
