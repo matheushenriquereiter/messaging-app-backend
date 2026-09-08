@@ -6,6 +6,7 @@ import org.example.messagingapp.dto.UserLoginDTO;
 import org.example.messagingapp.dto.UserRegisterDTO;
 import org.example.messagingapp.dto.UserResponseDTO;
 import org.example.messagingapp.service.AuthService;
+import org.example.messagingapp.util.BearerTokenUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponseDTO> me(@RequestHeader("Authorization") String bearerToken) {
-        String token = bearerToken.replace("Bearer ", "");
+        String token = BearerTokenUtil.extractToken(bearerToken);
         UserResponseDTO userResponseDTO = authService.me(token);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDTO);

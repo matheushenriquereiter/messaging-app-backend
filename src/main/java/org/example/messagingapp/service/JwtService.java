@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.example.messagingapp.util.BearerTokenUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,12 @@ public class JwtService {
 
     public Claims extractAllClaims(String token) {
         return Jwts.parser().verifyWith(getSignInKey()).build().parseSignedClaims(token).getPayload();
+    }
+
+    public String extractUsername(String bearerToken) {
+        String token = BearerTokenUtil.extractToken(bearerToken);
+        
+        return extractAllClaims(token).getSubject();
     }
 
     public boolean isTokenValid(String token) {

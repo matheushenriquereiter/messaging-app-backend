@@ -2,7 +2,6 @@ package org.example.messagingapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,14 +18,14 @@ public class Message {
     private Long id;
 
     @NotBlank(message = "Message content cannot be null or empty")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String content;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sender_id", referencedColumnName = "id")
     User sender;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
     User receiver;
 
