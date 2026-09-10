@@ -29,7 +29,6 @@ public class Message {
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
     User receiver;
 
-
     public Message(String content, User sender, User receiver) {
         this.content = content;
         this.sender = sender;

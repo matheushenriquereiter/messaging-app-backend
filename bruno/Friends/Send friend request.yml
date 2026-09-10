@@ -1,18 +1,16 @@
 info:
-  name: User sign up
+  name: Send friend request
   type: http
-  seq: 2
+  seq: 1
 
 http:
   method: POST
-  url: "{{url}}/auth/sign-up"
+  url: "{{url}}/friends/requests"
   body:
     type: json
     data: |-
       {
-        "username": "matheus",
-        "email": "mathenriquereiter@gmail.com",
-        "password": "matheus123"
+        "username": "jorge"
       }
   auth: inherit
 

@@ -31,8 +31,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany
-    private Set<User> friends;
+    @OneToMany(mappedBy = "sender")
+    private Set<FriendRequest> sentFriendRequests;
+
+    @OneToMany(mappedBy = "receiver")
+    private Set<FriendRequest> receivedFriendRequests;
 
     public User(String username, String email, String password) {
         this.username = username;

@@ -1,16 +1,15 @@
 info:
-  name: Register friend
+  name: Friend sign
   type: http
-  seq: 2
+  seq: 5
 
 http:
   method: POST
-  url: "{{url}}/auth/sign-up"
+  url: "{{url}}/auth/sign-in"
   body:
     type: json
     data: |-
       {
-        "username": "jorge",
         "email": "jorge@gmail.com",
         "password": "jorge123"
       }
@@ -21,3 +20,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
