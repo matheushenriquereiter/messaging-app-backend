@@ -2,7 +2,6 @@ package org.example.messagingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.dto.FriendRequestResponseDTO;
-import org.example.messagingapp.dto.FriendRequestUpdateDTO;
 import org.example.messagingapp.dto.UserResponseDTO;
 import org.example.messagingapp.dto.UsernameDTO;
 import org.example.messagingapp.enums.FriendRequestStatus;
@@ -74,9 +73,9 @@ public class FriendsService {
             throw new BusinessException(HttpStatus.CONFLICT, "Cannot send a friend request to yourself");
         }
 
-        Optional<FriendRequest> friendRequest = friendRequestRepository.findBySenderAndReceiver(user, friend);
+        Optional<FriendRequest> friendRequest = friendRequestRepository.getFriendRequestBetween(user, friend);
         if (friendRequest.isPresent()) {
-            throw new BusinessException(HttpStatus.CONFLICT, "Friend request already sent");
+            throw new BusinessException(HttpStatus.CONFLICT, "Friend request already exists");
         }
 
         friendRequestRepository.save(new FriendRequest(user, friend, FriendRequestStatus.PENDING));
