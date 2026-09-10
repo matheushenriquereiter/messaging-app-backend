@@ -9,7 +9,6 @@ import org.example.messagingapp.enums.FriendRequestStatus;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Table(name = "friend_requests")

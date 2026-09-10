@@ -3,6 +3,8 @@ package org.example.messagingapp.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.dto.FriendRequestResponseDTO;
+import org.example.messagingapp.dto.FriendRequestUpdateDTO;
+import org.example.messagingapp.dto.UserResponseDTO;
 import org.example.messagingapp.dto.UsernameDTO;
 import org.example.messagingapp.service.FriendsService;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendsController {
     private final FriendsService friendsService;
+
+    @GetMapping
+    public ResponseEntity<List<UserResponseDTO>> getFriends(@RequestHeader("Authorization") String bearerToken) {
+        List<UserResponseDTO> friends = friendsService.getUserFriends(bearerToken);
+
+        return ResponseEntity.ok(friends);
+    }
 
     @GetMapping("/requests")
     public ResponseEntity<List<FriendRequestResponseDTO>> getReceivedFriendRequests(@RequestHeader("Authorization") String bearerToken) {
