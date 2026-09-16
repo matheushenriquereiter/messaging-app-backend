@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.messagingapp.dto.MessageResponseDTO;
 import org.example.messagingapp.dto.SendMessageDTO;
 import org.example.messagingapp.dto.UsernameDTO;
-import org.example.messagingapp.model.Message;
 import org.example.messagingapp.service.MessageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

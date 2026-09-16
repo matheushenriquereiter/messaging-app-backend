@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class FriendsService {
+public class FriendService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final FriendRequestRepository friendRequestRepository;
@@ -48,12 +48,10 @@ public class FriendsService {
     public List<FriendRequestResponseDTO> getReceivedFriendRequests(String bearerToken) {
         String username = jwtService.extractUsername(bearerToken);
 
-        User user = userRepository
-                .getUserByUsername(username)
+        User user = userRepository.getUserByUsername(username)
                 .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Authenticated user not found"));
 
-        return user
-                .getReceivedFriendRequests()
+        return user.getReceivedFriendRequests()
                 .stream()
                 .map(FriendRequestUtil::toResponseDTO)
                 .toList();

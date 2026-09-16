@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Optional;
 
 @Service
@@ -49,10 +50,10 @@ public class AuthService {
         return new TokenDTO(jwtService.generateAccessToken(user.getUsername()));
     }
 
-    public UserResponseDTO me(String token) {
-        String username = jwtService.extractAllClaims(token).getSubject();
-        User user = userRepository.getUserByUsername(username).orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "User not found"));
+    public UserResponseDTO me(Principal principal) {
+        User authenticatedUser = userRepository.getUserByUsername(principal.getName())
+                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Authenticated user not found"));
 
-        return new UserResponseDTO(user.getUsername(), user.getEmail());
+        return new UserResponseDTO(authenticatedUser.getUsername(), authenticatedUser.getEmail());
     }
 }
